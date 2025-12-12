@@ -1,13 +1,7 @@
-import 'package:project/models/rate_alert.dart';
-
 class AlertService {
-  List<RateAlert> alerts = [];
+  List<String> alerts = [];
 
-  void addAlert(RateAlert alert) {
-    alerts.add(alert);
-  }
-
-  void removeAlert(RateAlert alert) {
-    alerts.remove(alert);
+  void addAlert(String text) {
+    alerts.add(text);
   }
 }

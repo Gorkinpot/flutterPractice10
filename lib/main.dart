@@ -1,19 +1,60 @@
 import 'package:flutter/material.dart';
-import 'di.dart';
-import 'app_router.dart';
+import 'package:get_it/get_it.dart';
+import 'stores/account_store.dart';
+import 'stores/conversion_store.dart';
+import 'stores/exchange_rate_store.dart';
+import 'stores/alert_store.dart';
+import 'stores/tips_store.dart';
+import 'screens/main_menu_screen.dart';
 
 void main() {
-  setupDI();
-  runApp(MyApp());
+  WidgetsFlutterBinding.ensureInitialized();
+
+  final gi = GetIt.I;
+  gi.registerSingleton<AccountStore>(AccountStore());
+  gi.registerSingleton<ConversionStore>(ConversionStore());
+  gi.registerSingleton<ExchangeRateStore>(ExchangeRateStore());
+  gi.registerSingleton<AlertStore>(AlertStore());
+  gi.registerSingleton<TipsStore>(TipsStore());
+
+  runApp(const CurrencyConverterApp());
 }
 
-class MyApp extends StatelessWidget {
+class CurrencyConverterApp extends StatelessWidget {
+  const CurrencyConverterApp({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
+    return MaterialApp(
       title: 'Конвертер валют',
-      routerConfig: router,
-      theme: ThemeData(primarySwatch: Colors.blue),
+      theme: ThemeData(
+        primaryColor: const Color(0xFF8EC5FC), // мягкий голубой
+        scaffoldBackgroundColor: const Color(0xFFF0F4F8), // светло-серый фон
+        appBarTheme: const AppBarTheme(
+          backgroundColor: Color(0xFF8EC5FC),
+          foregroundColor: Colors.black,
+          elevation: 2,
+        ),
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: const Color(0xFF6CA0DC), // мягкий синий
+            foregroundColor: Colors.white,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+          ),
+        ),
+        cardColor: Colors.white,
+        inputDecorationTheme: InputDecorationTheme(
+          filled: true,
+          fillColor: Colors.white,
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12),
+            borderSide: BorderSide.none,
+          ),
+        ),
+      ),
+      home: const MainMenuScreen(),
     );
   }
 }

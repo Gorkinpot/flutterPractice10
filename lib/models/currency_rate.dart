@@ -1,11 +1,11 @@
 class CurrencyRate {
   String currencyCode;
-  double rate;
+  double rate; // relative to base (e.g., base = "USD")
   DateTime lastUpdated;
 
   CurrencyRate({
     required this.currencyCode,
     required this.rate,
-    required this.lastUpdated,
-  });
+    DateTime? lastUpdated,
+  }) : lastUpdated = lastUpdated ?? DateTime.now();
 }

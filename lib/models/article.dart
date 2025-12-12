@@ -1,4 +1,5 @@
 class Article {
+  String id;
   String title;
   String description;
   String content;
@@ -6,6 +7,7 @@ class Article {
   String category;
 
   Article({
+    required this.id,
     required this.title,
     required this.description,
     required this.content,

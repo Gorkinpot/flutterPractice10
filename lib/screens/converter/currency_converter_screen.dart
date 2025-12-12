@@ -1,54 +1,183 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:project/store/converter_store.dart';
 import 'package:get_it/get_it.dart';
-import 'package:project/services/conversion_service.dart';
+import '../../stores/conversion_store.dart';
+import '../history/conversion_history_screen.dart';
 
-class CurrencyConverterScreen extends StatelessWidget {
-  final ConverterStore store = ConverterStore(GetIt.I<ConversionService>());
+class CurrencyConverterScreen extends StatefulWidget {
+  const CurrencyConverterScreen({super.key});
 
-  CurrencyConverterScreen({super.key});
+  @override
+  _CurrencyConverterScreenState createState() =>
+      _CurrencyConverterScreenState();
+}
+
+class _CurrencyConverterScreenState extends State<CurrencyConverterScreen> {
+  final TextEditingController amountController = TextEditingController();
+  String fromCurrency = 'USD';
+  String toCurrency = 'EUR';
+
+  final ConversionStore store = GetIt.I<ConversionStore>();
+
+  void convert() {
+    final double? amount = double.tryParse(amountController.text);
+    if (amount == null) return;
+
+    store.convert(fromCurrency, toCurrency, amount);
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Scaffold(
-      appBar: AppBar(title: Text('Конвертер валют')),
-      body: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          children: [
-            Observer(
-              builder: (_) => TextField(
-                keyboardType: TextInputType.number,
-                decoration: InputDecoration(labelText: 'Сумма'),
-                onChanged: (v) => store.setAmount(double.tryParse(v) ?? 0.0),
+      backgroundColor: Colors.grey[100],
+      appBar: AppBar(
+        title: const Text('Конвертер валют'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.history),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (_) => const ConversionHistoryScreen()),
+              );
+            },
+          ),
+        ],
+      ),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            children: [
+              Card(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16)),
+                elevation: 5,
+                color: Colors.blue[50],
+                child: Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: Column(
+                    children: [
+                      Text(
+                        'Введите сумму для конверсии',
+                        style: theme.textTheme.titleMedium,
+                      ),
+                      const SizedBox(height: 12),
+                      TextField(
+                        controller: amountController,
+                        keyboardType: TextInputType.number,
+                        decoration: InputDecoration(
+                          labelText: 'Сумма',
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          prefixIcon: const Icon(Icons.attach_money),
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Expanded(
+                            child: DropdownButtonFormField<String>(
+                              value: fromCurrency,
+                              decoration: const InputDecoration(
+                                labelText: 'Из',
+                                border: OutlineInputBorder(),
+                              ),
+                              items: store.fakeRates.keys
+                                  .map((e) => DropdownMenuItem(
+                                value: e,
+                                child: Text(e),
+                              ))
+                                  .toList(),
+                              onChanged: (val) {
+                                setState(() => fromCurrency = val!);
+                              },
+                            ),
+                          ),
+                          const Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 8.0),
+                            child: Icon(Icons.arrow_forward, size: 32),
+                          ),
+                          Expanded(
+                            child: DropdownButtonFormField<String>(
+                              value: toCurrency,
+                              decoration: const InputDecoration(
+                                labelText: 'В',
+                                border: OutlineInputBorder(),
+                              ),
+                              items: store.fakeRates.keys
+                                  .map((e) => DropdownMenuItem(
+                                value: e,
+                                child: Text(e),
+                              ))
+                                  .toList(),
+                              onChanged: (val) {
+                                setState(() => toCurrency = val!);
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 16),
+                      SizedBox(
+                        width: double.infinity,
+                        child: ElevatedButton.icon(
+                          onPressed: convert,
+                          icon: const Icon(Icons.swap_horiz),
+                          label: const Text('Конвертировать'),
+                          style: ElevatedButton.styleFrom(
+                            padding: const EdgeInsets.symmetric(vertical: 16),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12)),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               ),
-            ),
-            Observer(
-              builder: (_) => DropdownButton<String>(
-                value: store.fromCurrency,
-                items: ['USD', 'EUR', 'RUB']
-                    .map((e) => DropdownMenuItem(value: e, child: Text(e)))
-                    .toList(),
-                onChanged: store.setFromCurrency,
-              ),
-            ),
-            Observer(
-              builder: (_) => DropdownButton<String>(
-                value: store.toCurrency,
-                items: ['USD', 'EUR', 'RUB']
-                    .map((e) => DropdownMenuItem(value: e, child: Text(e)))
-                    .toList(),
-                onChanged: store.setToCurrency,
-              ),
-            ),
-            SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: store.convert,
-              child: Text('Конвертировать'),
-            ),
-            Observer(builder: (_) => Text('Результат: ${store.result}')),
-          ],
+              const SizedBox(height: 24),
+              if (store.result != null)
+                Card(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16)),
+                  elevation: 4,
+                  color: Colors.green[50],
+                  child: Padding(
+                    padding: const EdgeInsets.all(20),
+                    child: Column(
+                      children: [
+                        const Text(
+                          'Результат конверсии',
+                          style: TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.bold),
+                        ),
+                        const SizedBox(height: 12),
+                        AnimatedSwitcher(
+                          duration: const Duration(milliseconds: 400),
+                          child: Text(
+                            '${store.result!.toStringAsFixed(2)} $toCurrency',
+                            key: ValueKey(store.result),
+                            style: const TextStyle(
+                                fontSize: 28, fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                        const SizedBox(height: 12),
+                        Text(
+                          'Из $fromCurrency в $toCurrency',
+                          style: theme.textTheme.bodyMedium,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+            ],
+          ),
         ),
       ),
     );

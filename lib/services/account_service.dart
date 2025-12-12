@@ -1,32 +1,21 @@
-import 'package:project/models/user_account.dart';
-
 class AccountService {
-  List<UserAccount> users = [];
-  UserAccount? currentUser;
+  String? currentUser;
+  List<String> users = [];
 
-  void register(UserAccount user) {
-    users.add(user);
-    currentUser = user;
-  }
-
-  bool login(String email, String password) {
-    final user = users.firstWhere(
-          (u) => u.email == email && u.password == password,
-      orElse: () => UserAccount(id: '', name: '', email: '', password: ''),
-    );
-    if (user.id.isNotEmpty) {
-      currentUser = user;
+  bool login(String email) {
+    if (users.contains(email)) {
+      currentUser = email;
       return true;
     }
     return false;
   }
 
-  void logout() => currentUser = null;
+  void register(String email) {
+    if (!users.contains(email)) users.add(email);
+    currentUser = email;
+  }
 
-  void updateProfile(String name, String email) {
-    if (currentUser != null) {
-      currentUser!.name = name;
-      currentUser!.email = email;
-    }
+  void logout() {
+    currentUser = null;
   }
 }

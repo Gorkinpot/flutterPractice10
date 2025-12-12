@@ -10,6 +10,6 @@ class Conversion {
     required this.toCurrency,
     required this.amount,
     required this.result,
-    required this.timestamp,
-  });
+    DateTime? timestamp,
+  }) : timestamp = timestamp ?? DateTime.now();
 }

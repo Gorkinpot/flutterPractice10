@@ -1,13 +1,17 @@
-import 'package:project/models/conversion.dart';
+import '../models/conversion.dart';
 
 class ConversionService {
-  List<Conversion> conversions = [];
+  final List<Conversion> _history = [];
 
-  void addConversion(Conversion c) {
-    conversions.add(c);
+  List<Conversion> get history => List.unmodifiable(_history);
+
+  void add(Conversion c) {
+    _history.insert(0, c);
   }
 
-  void clearHistory() {
-    conversions.clear();
+  void clear() => _history.clear();
+
+  void removeAt(int index) {
+    if (index >= 0 && index < _history.length) _history.removeAt(index);
   }
 }

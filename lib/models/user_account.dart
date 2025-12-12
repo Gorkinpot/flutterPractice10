@@ -10,6 +10,6 @@ class UserAccount {
     required this.name,
     required this.email,
     required this.password,
-    this.favoriteCurrencies = const [],
-  });
+    List<String>? favoriteCurrencies,
+  }) : favoriteCurrencies = favoriteCurrencies ?? [];
 }
