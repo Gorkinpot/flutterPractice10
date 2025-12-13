@@ -15,16 +15,22 @@ class ConversionStore extends ChangeNotifier {
   List<String> get history => List.unmodifiable(_history);
 
   void convert(String fromCurrency, String toCurrency, double amount) {
-    double fromRate = fakeRates[fromCurrency]!;
-    double toRate = fakeRates[toCurrency]!;
+    final fromRate = fakeRates[fromCurrency]!;
+    final toRate = fakeRates[toCurrency]!;
 
     result = amount * (toRate / fromRate);
 
     _history.insert(
       0,
-      '${amount.toStringAsFixed(2)} $fromCurrency → ${result!.toStringAsFixed(2)} $toCurrency',
+      '${amount.toStringAsFixed(2)} $fromCurrency → '
+          '${result!.toStringAsFixed(2)} $toCurrency',
     );
 
+    notifyListeners();
+  }
+
+  void removeAt(int index) {
+    _history.removeAt(index);
     notifyListeners();
   }
 
