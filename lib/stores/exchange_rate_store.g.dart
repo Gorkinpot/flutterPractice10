@@ -51,6 +51,18 @@ mixin _$ExchangeRateStore on _ExchangeRateStore, Store {
   );
 
   @override
+  void _updateRates() {
+    final _$actionInfo = _$_ExchangeRateStoreActionController.startAction(
+      name: '_ExchangeRateStore._updateRates',
+    );
+    try {
+      return super._updateRates();
+    } finally {
+      _$_ExchangeRateStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   double getRate(String currency) {
     final _$actionInfo = _$_ExchangeRateStoreActionController.startAction(
       name: '_ExchangeRateStore.getRate',
@@ -69,6 +81,18 @@ mixin _$ExchangeRateStore on _ExchangeRateStore, Store {
     );
     try {
       return super.toggleFavorite(currency);
+    } finally {
+      _$_ExchangeRateStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void dispose() {
+    final _$actionInfo = _$_ExchangeRateStoreActionController.startAction(
+      name: '_ExchangeRateStore.dispose',
+    );
+    try {
+      return super.dispose();
     } finally {
       _$_ExchangeRateStoreActionController.endAction(_$actionInfo);
     }

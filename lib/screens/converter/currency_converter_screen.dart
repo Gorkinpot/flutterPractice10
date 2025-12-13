@@ -1,6 +1,9 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import '../../stores/conversion_store.dart';
+import '../../stores/exchange_rate_store.dart';
 import '../history/conversion_history_screen.dart';
 
 class CurrencyConverterScreen extends StatefulWidget {
@@ -17,11 +20,35 @@ class _CurrencyConverterScreenState extends State<CurrencyConverterScreen> {
   String toCurrency = 'EUR';
 
   final ConversionStore store = GetIt.I<ConversionStore>();
+  final ExchangeRateStore rateStore = GetIt.I<ExchangeRateStore>();
+  Timer? timer;
+
+  @override
+  void initState() {
+    super.initState();
+
+    // подписываемся на обновление курсов и пересчет результата
+    timer = Timer.periodic(const Duration(seconds: 1), (_) {
+      if (amountController.text.isNotEmpty) {
+        final amount = double.tryParse(amountController.text);
+        if (amount != null) {
+          store.result = amount *
+              (rateStore.getRate(toCurrency) / rateStore.getRate(fromCurrency));
+          setState(() {});
+        }
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    timer?.cancel();
+    super.dispose();
+  }
 
   void convert() {
     final double? amount = double.tryParse(amountController.text);
     if (amount == null) return;
-
     store.convert(fromCurrency, toCurrency, amount);
     setState(() {});
   }
@@ -52,6 +79,7 @@ class _CurrencyConverterScreenState extends State<CurrencyConverterScreen> {
           padding: const EdgeInsets.all(20),
           child: Column(
             children: [
+              // Карточка ввода суммы и выбора валют
               Card(
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(16)),
@@ -88,7 +116,7 @@ class _CurrencyConverterScreenState extends State<CurrencyConverterScreen> {
                                 labelText: 'Из',
                                 border: OutlineInputBorder(),
                               ),
-                              items: store.fakeRates.keys
+                              items: rateStore.rates.keys
                                   .map((e) => DropdownMenuItem(
                                 value: e,
                                 child: Text(e),
@@ -110,7 +138,7 @@ class _CurrencyConverterScreenState extends State<CurrencyConverterScreen> {
                                 labelText: 'В',
                                 border: OutlineInputBorder(),
                               ),
-                              items: store.fakeRates.keys
+                              items: rateStore.rates.keys
                                   .map((e) => DropdownMenuItem(
                                 value: e,
                                 child: Text(e),
@@ -141,7 +169,10 @@ class _CurrencyConverterScreenState extends State<CurrencyConverterScreen> {
                   ),
                 ),
               ),
+
               const SizedBox(height: 24),
+
+              // Результат конверсии
               if (store.result != null)
                 Card(
                   shape: RoundedRectangleBorder(

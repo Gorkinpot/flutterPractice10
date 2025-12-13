@@ -1,13 +1,9 @@
 import 'package:flutter/foundation.dart';
+import 'package:get_it/get_it.dart';
+import 'exchange_rate_store.dart';
 
 class ConversionStore extends ChangeNotifier {
-  final Map<String, double> fakeRates = {
-    'USD': 1.0,
-    'EUR': 0.92,
-    'RUB': 75.0,
-    'GBP': 0.82,
-    'JPY': 140.0,
-  };
+  final ExchangeRateStore rateStore = GetIt.I<ExchangeRateStore>();
 
   double? result;
   final List<String> _history = [];
@@ -15,8 +11,8 @@ class ConversionStore extends ChangeNotifier {
   List<String> get history => List.unmodifiable(_history);
 
   void convert(String fromCurrency, String toCurrency, double amount) {
-    final fromRate = fakeRates[fromCurrency]!;
-    final toRate = fakeRates[toCurrency]!;
+    final fromRate = rateStore.getRate(fromCurrency);
+    final toRate = rateStore.getRate(toCurrency);
 
     result = amount * (toRate / fromRate);
 

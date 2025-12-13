@@ -11,9 +11,9 @@ void main() {
   WidgetsFlutterBinding.ensureInitialized();
 
   final gi = GetIt.I;
+  gi.registerSingleton<ExchangeRateStore>(ExchangeRateStore());
   gi.registerSingleton<AccountStore>(AccountStore());
   gi.registerSingleton<ConversionStore>(ConversionStore());
-  gi.registerSingleton<ExchangeRateStore>(ExchangeRateStore());
   gi.registerSingleton<AlertStore>(AlertStore());
   gi.registerSingleton<TipsStore>(TipsStore());
 

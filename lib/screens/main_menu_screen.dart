@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:project/screens/about/about_app_screen.dart';
 import 'converter/currency_converter_screen.dart';
 import 'rates/exchange_rates_screen.dart';
 import 'history/conversion_history_screen.dart';
-import 'favorites/favorite_currencies_screen.dart';
 import 'alerts/rate_alerts_screen.dart';
 import 'tips/tips_screen.dart';
 import 'account/login_screen.dart';
@@ -56,8 +56,8 @@ class MainMenuScreen extends StatelessWidget {
                 ),
                 _MenuCard(
                   icon: Icons.star,
-                  title: 'Избранное',
-                  onTap: () => _open(context, FavoriteCurrenciesScreen()),
+                  title: 'О приложении',
+                  onTap: () => _open(context, AboutAppScreen()),
                 ),
               ),
               const SizedBox(height: 12),
