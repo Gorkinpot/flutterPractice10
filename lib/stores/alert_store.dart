@@ -1,15 +1,28 @@
-import 'package:mobx/mobx.dart';
+import 'package:flutter/foundation.dart';
+import '../models/rate_alert.dart';
 
-part 'alert_store.g.dart';
+class AlertStore extends ChangeNotifier {
+  final List<RateAlert> _alerts = [];
 
-class AlertStore = _AlertStore with _$AlertStore;
+  List<RateAlert> get alerts => List.unmodifiable(_alerts);
 
-abstract class _AlertStore with Store {
-  @observable
-  ObservableList<String> alerts = ObservableList<String>();
+  void addAlert(RateAlert alert) {
+    _alerts.insert(0, alert);
+    notifyListeners();
+  }
 
-  @action
-  void addAlert(String text) {
-    alerts.add(text);
+  void removeAlert(int index) {
+    _alerts.removeAt(index);
+    notifyListeners();
+  }
+
+  void toggle(int index) {
+    _alerts[index].enabled = !_alerts[index].enabled;
+    notifyListeners();
+  }
+
+  void clear() {
+    _alerts.clear();
+    notifyListeners();
   }
 }

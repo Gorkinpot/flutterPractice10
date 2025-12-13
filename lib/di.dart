@@ -3,7 +3,6 @@ import 'services/account_service.dart';
 import 'services/conversion_service.dart';
 import 'services/exchange_rate_service.dart';
 import 'services/alert_service.dart';
-import 'services/tips_service.dart';
 
 final getIt = GetIt.instance;
 
@@ -12,5 +11,4 @@ void setupDI() {
   getIt.registerSingleton<ConversionService>(ConversionService());
   getIt.registerSingleton<ExchangeRateService>(ExchangeRateService());
   getIt.registerSingleton<AlertService>(AlertService());
-  getIt.registerSingleton<TipsService>(TipsService());
 }

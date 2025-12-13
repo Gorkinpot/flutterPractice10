@@ -1,13 +1,17 @@
 class RateAlert {
-  String id;
-  String currencyCode;
-  double targetRate;
-  bool isActive;
+  final String from;
+  final String to;
+  final double value;
+  final bool isGreater;
+  bool enabled;
+  final DateTime createdAt;
 
   RateAlert({
-    required this.id,
-    required this.currencyCode,
-    required this.targetRate,
-    this.isActive = true,
+    required this.from,
+    required this.to,
+    required this.value,
+    required this.isGreater,
+    this.enabled = true,
+    required this.createdAt,
   });
 }

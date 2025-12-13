@@ -12,16 +12,57 @@ mixin _$TipsStore on _TipsStore, Store {
   late final _$tipsAtom = Atom(name: '_TipsStore.tips', context: context);
 
   @override
-  ObservableList<String> get tips {
+  ObservableList<Tip> get tips {
     _$tipsAtom.reportRead();
     return super.tips;
   }
 
   @override
-  set tips(ObservableList<String> value) {
+  set tips(ObservableList<Tip> value) {
     _$tipsAtom.reportWrite(value, super.tips, () {
       super.tips = value;
     });
+  }
+
+  late final _$_TipsStoreActionController = ActionController(
+    name: '_TipsStore',
+    context: context,
+  );
+
+  @override
+  void addTip(String text) {
+    final _$actionInfo = _$_TipsStoreActionController.startAction(
+      name: '_TipsStore.addTip',
+    );
+    try {
+      return super.addTip(text);
+    } finally {
+      _$_TipsStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void removeTip(int index) {
+    final _$actionInfo = _$_TipsStoreActionController.startAction(
+      name: '_TipsStore.removeTip',
+    );
+    try {
+      return super.removeTip(index);
+    } finally {
+      _$_TipsStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void toggleFavorite(int index) {
+    final _$actionInfo = _$_TipsStoreActionController.startAction(
+      name: '_TipsStore.toggleFavorite',
+    );
+    try {
+      return super.toggleFavorite(index);
+    } finally {
+      _$_TipsStoreActionController.endAction(_$actionInfo);
+    }
   }
 
   @override
