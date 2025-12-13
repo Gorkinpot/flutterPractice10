@@ -11,14 +11,31 @@ abstract class _AccountStore with Store {
   String? userName;
 
   @observable
+  String? country;
+
+  @observable
+  DateTime? birthDate;
+
+  @observable
+  DateTime? registrationDate;
+
+  @observable
   bool isLoggedIn = false;
 
-  final Map<String, Map<String, String>> _users = {}; // email -> {password, name}
+  final Map<String, Map<String, dynamic>> _users = {};
+  // email -> {password, name, country, birthDate, registrationDate}
 
   @action
-  String? register(String email, String password, {String? name}) {
+  String? register(String email, String password) {
     if (_users.containsKey(email)) return 'Пользователь уже существует';
-    _users[email] = {'password': password, 'name': name ?? ''};
+
+    _users[email] = {
+      'password': password,
+      'name': '',
+      'country': '',
+      'birthDate': null,
+      'registrationDate': DateTime.now(),
+    };
     return null;
   }
 
@@ -26,25 +43,48 @@ abstract class _AccountStore with Store {
   String? login(String email, String password) {
     if (!_users.containsKey(email)) return 'Пользователь не найден';
     if (_users[email]!['password'] != password) return 'Неверный пароль';
+
+    final data = _users[email]!;
     userEmail = email;
-    userName = _users[email]!['name'];
+    userName = data['name'];
+    country = data['country'];
+    birthDate = data['birthDate'];
+    registrationDate = data['registrationDate'];
     isLoggedIn = true;
+
     return null;
+  }
+
+  @action
+  void updateProfile({
+    String? name,
+    String? countryValue,
+    DateTime? birth,
+  }) {
+    if (userEmail == null) return;
+
+    final data = _users[userEmail!]!;
+    if (name != null) {
+      data['name'] = name;
+      userName = name;
+    }
+    if (countryValue != null) {
+      data['country'] = countryValue;
+      country = countryValue;
+    }
+    if (birth != null) {
+      data['birthDate'] = birth;
+      birthDate = birth;
+    }
   }
 
   @action
   void logout() {
     userEmail = null;
     userName = null;
+    country = null;
+    birthDate = null;
+    registrationDate = null;
     isLoggedIn = false;
-  }
-
-  @action
-  void updateProfile({String? name}) {
-    if (userEmail == null) return;
-    if (name != null) {
-      _users[userEmail!]!['name'] = name;
-      userName = name;
-    }
   }
 }

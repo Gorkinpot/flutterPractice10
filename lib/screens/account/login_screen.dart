@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import '../../stores/account_store.dart';
-import 'package:project/screens/account/registration_screen.dart';
+import 'registration_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
-  _LoginScreenState createState() => _LoginScreenState();
+  State<LoginScreen> createState() => _LoginScreenState();
 }
 
 class _LoginScreenState extends State<LoginScreen> {
@@ -13,59 +13,115 @@ class _LoginScreenState extends State<LoginScreen> {
   final passwordController = TextEditingController();
 
   final accountStore = GetIt.I<AccountStore>();
-
   String? error;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Вход')),
-      body: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          children: [
-            TextField(
-              controller: emailController,
-              decoration: InputDecoration(labelText: 'Email'),
-            ),
-            TextField(
-              controller: passwordController,
-              decoration: InputDecoration(labelText: 'Пароль'),
-              obscureText: true,
-            ),
-            if (error != null)
-              Padding(
-                padding: const EdgeInsets.only(top: 8),
-                child: Text(error!, style: TextStyle(color: Colors.red)),
+      backgroundColor: const Color(0xFFF0F4F8),
+      appBar: AppBar(title: const Text('Вход')),
+      body: Center(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: Card(
+              elevation: 4,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
               ),
-            SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: () {
-                final e = emailController.text.trim();
-                final p = passwordController.text.trim();
-                final result = accountStore.login(e, p);
-                if (result != null) {
-                  setState(() {
-                    error = result;
-                  });
-                } else {
-                  Navigator.pop(context); // Возврат на главный экран после входа
-                }
-              },
-              child: Text('Войти'),
+              child: Padding(
+                padding: const EdgeInsets.all(20),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Icon(
+                      Icons.lock_outline,
+                      size: 48,
+                      color: Colors.blueAccent,
+                    ),
+                    const SizedBox(height: 16),
+                    const Text(
+                      'Добро пожаловать',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 24),
+
+                    _field(
+                      controller: emailController,
+                      label: 'Email',
+                      icon: Icons.email,
+                    ),
+                    const SizedBox(height: 16),
+                    _field(
+                      controller: passwordController,
+                      label: 'Пароль',
+                      icon: Icons.lock,
+                      obscure: true,
+                    ),
+
+                    if (error != null) ...[
+                      const SizedBox(height: 12),
+                      Text(
+                        error!,
+                        style: const TextStyle(color: Colors.red),
+                      ),
+                    ],
+
+                    const SizedBox(height: 24),
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        onPressed: _login,
+                        child: const Text('Войти'),
+                      ),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (_) => RegisterScreen()),
+                        );
+                      },
+                      child: const Text('Нет аккаунта? Зарегистрироваться'),
+                    ),
+                  ],
+                ),
+              ),
             ),
-            TextButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => RegisterScreen()),
-                );
-              },
-              child: Text('Нет аккаунта? Зарегистрироваться'),
-            ),
-          ],
+          ),
         ),
       ),
     );
+  }
+
+  Widget _field({
+    required TextEditingController controller,
+    required String label,
+    required IconData icon,
+    bool obscure = false,
+  }) {
+    return TextField(
+      controller: controller,
+      obscureText: obscure,
+      decoration: InputDecoration(
+        labelText: label,
+        prefixIcon: Icon(icon),
+      ),
+    );
+  }
+
+  void _login() {
+    final e = emailController.text.trim();
+    final p = passwordController.text.trim();
+
+    final result = accountStore.login(e, p);
+    if (result != null) {
+      setState(() => error = result);
+    } else {
+      Navigator.pop(context);
+    }
   }
 }

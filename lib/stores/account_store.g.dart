@@ -45,6 +45,60 @@ mixin _$AccountStore on _AccountStore, Store {
     });
   }
 
+  late final _$countryAtom = Atom(
+    name: '_AccountStore.country',
+    context: context,
+  );
+
+  @override
+  String? get country {
+    _$countryAtom.reportRead();
+    return super.country;
+  }
+
+  @override
+  set country(String? value) {
+    _$countryAtom.reportWrite(value, super.country, () {
+      super.country = value;
+    });
+  }
+
+  late final _$birthDateAtom = Atom(
+    name: '_AccountStore.birthDate',
+    context: context,
+  );
+
+  @override
+  DateTime? get birthDate {
+    _$birthDateAtom.reportRead();
+    return super.birthDate;
+  }
+
+  @override
+  set birthDate(DateTime? value) {
+    _$birthDateAtom.reportWrite(value, super.birthDate, () {
+      super.birthDate = value;
+    });
+  }
+
+  late final _$registrationDateAtom = Atom(
+    name: '_AccountStore.registrationDate',
+    context: context,
+  );
+
+  @override
+  DateTime? get registrationDate {
+    _$registrationDateAtom.reportRead();
+    return super.registrationDate;
+  }
+
+  @override
+  set registrationDate(DateTime? value) {
+    _$registrationDateAtom.reportWrite(value, super.registrationDate, () {
+      super.registrationDate = value;
+    });
+  }
+
   late final _$isLoggedInAtom = Atom(
     name: '_AccountStore.isLoggedIn',
     context: context,
@@ -69,12 +123,12 @@ mixin _$AccountStore on _AccountStore, Store {
   );
 
   @override
-  String? register(String email, String password, {String? name}) {
+  String? register(String email, String password) {
     final _$actionInfo = _$_AccountStoreActionController.startAction(
       name: '_AccountStore.register',
     );
     try {
-      return super.register(email, password, name: name);
+      return super.register(email, password);
     } finally {
       _$_AccountStoreActionController.endAction(_$actionInfo);
     }
@@ -93,6 +147,22 @@ mixin _$AccountStore on _AccountStore, Store {
   }
 
   @override
+  void updateProfile({String? name, String? countryValue, DateTime? birth}) {
+    final _$actionInfo = _$_AccountStoreActionController.startAction(
+      name: '_AccountStore.updateProfile',
+    );
+    try {
+      return super.updateProfile(
+        name: name,
+        countryValue: countryValue,
+        birth: birth,
+      );
+    } finally {
+      _$_AccountStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void logout() {
     final _$actionInfo = _$_AccountStoreActionController.startAction(
       name: '_AccountStore.logout',
@@ -105,22 +175,13 @@ mixin _$AccountStore on _AccountStore, Store {
   }
 
   @override
-  void updateProfile({String? name}) {
-    final _$actionInfo = _$_AccountStoreActionController.startAction(
-      name: '_AccountStore.updateProfile',
-    );
-    try {
-      return super.updateProfile(name: name);
-    } finally {
-      _$_AccountStoreActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
   String toString() {
     return '''
 userEmail: ${userEmail},
 userName: ${userName},
+country: ${country},
+birthDate: ${birthDate},
+registrationDate: ${registrationDate},
 isLoggedIn: ${isLoggedIn}
     ''';
   }

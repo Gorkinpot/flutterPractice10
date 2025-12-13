@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:project/screens/converter/currency_converter_screen.dart';
-import 'package:project/screens/rates/exchange_rates_screen.dart';
-import 'package:project/screens/history/conversion_history_screen.dart';
-import 'package:project/screens/favorites/favorite_currencies_screen.dart';
-import 'package:project/screens/alerts/rate_alerts_screen.dart';
-import 'package:project/screens/tips/tips_screen.dart';
+import 'converter/currency_converter_screen.dart';
+import 'rates/exchange_rates_screen.dart';
+import 'history/conversion_history_screen.dart';
+import 'favorites/favorite_currencies_screen.dart';
+import 'alerts/rate_alerts_screen.dart';
+import 'tips/tips_screen.dart';
 import 'account/login_screen.dart';
 import 'account/profile_screen.dart';
 
@@ -19,58 +19,133 @@ class MainMenuScreen extends StatelessWidget {
         actions: [
           IconButton(
             icon: const Icon(Icons.person),
-            onPressed: () => Navigator.push(
-              context,
-              MaterialPageRoute(builder: (_) => ProfileScreen()),
-            ),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => ProfileScreen()),
+              );
+            },
           ),
         ],
       ),
-      body: Center(
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(12),
+          child: Column(
+            children: [
+              _row(
+                context,
+                _MenuCard(
+                  icon: Icons.currency_exchange,
+                  title: 'Конвертер',
+                  onTap: () => _open(context, CurrencyConverterScreen()),
+                ),
+                _MenuCard(
+                  icon: Icons.trending_up,
+                  title: 'Курсы валют',
+                  onTap: () => _open(context, ExchangeRatesScreen()),
+                ),
+              ),
+              const SizedBox(height: 12),
+              _row(
+                context,
+                _MenuCard(
+                  icon: Icons.history,
+                  title: 'История',
+                  onTap: () => _open(context, ConversionHistoryScreen()),
+                ),
+                _MenuCard(
+                  icon: Icons.star,
+                  title: 'Избранное',
+                  onTap: () => _open(context, FavoriteCurrenciesScreen()),
+                ),
+              ),
+              const SizedBox(height: 12),
+              _row(
+                context,
+                _MenuCard(
+                  icon: Icons.notifications,
+                  title: 'Уведомления',
+                  onTap: () => _open(context, RateAlertsScreen()),
+                ),
+                _MenuCard(
+                  icon: Icons.lightbulb_outline,
+                  title: 'Советы',
+                  onTap: () => _open(context, TipsScreen()),
+                ),
+              ),
+              const SizedBox(height: 12),
+              Expanded(
+                child: _MenuCard(
+                  icon: Icons.login,
+                  title: 'Вход / Профиль',
+                  onTap: () => _open(context, LoginScreen()),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _row(BuildContext context, Widget left, Widget right) {
+    return Expanded(
+      child: Row(
+        children: [
+          Expanded(child: left),
+          const SizedBox(width: 12),
+          Expanded(child: right),
+        ],
+      ),
+    );
+  }
+
+  void _open(BuildContext context, Widget screen) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => screen),
+    );
+  }
+}
+
+class _MenuCard extends StatelessWidget {
+  final IconData icon;
+  final String title;
+  final VoidCallback onTap;
+
+  const _MenuCard({
+    required this.icon,
+    required this.title,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      borderRadius: BorderRadius.circular(16),
+      onTap: onTap,
+      child: Card(
+        elevation: 2,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+        ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            ElevatedButton(
-                onPressed: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => CurrencyConverterScreen())),
-                child: const Text("Конвертер валют")
+            Icon(
+              icon,
+              size: 26,
+              color: Theme.of(context).primaryColor,
             ),
-            ElevatedButton(
-              onPressed: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => ExchangeRatesScreen())),
-              child: const Text('Курсы валют'),
-            ),
-            ElevatedButton(
-              onPressed: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => ConversionHistoryScreen())),
-              child: const Text('История конверсий'),
-            ),
-            ElevatedButton(
-              onPressed: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => FavoriteCurrenciesScreen())),
-              child: const Text('Избранные валюты'),
-            ),
-            ElevatedButton(
-              onPressed: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => RateAlertsScreen())),
-              child: const Text('Уведомления о курсах'),
-            ),
-            ElevatedButton(
-              onPressed: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => TipsScreen())),
-              child: const Text('Советы и статьи'),
-            ),
-            ElevatedButton(
-              onPressed: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => LoginScreen())),
-              child: const Text('Войти / Зарегистрироваться'),
+            const SizedBox(height: 8),
+            Text(
+              title,
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                fontSize: 13,
+                fontWeight: FontWeight.w500,
+              ),
             ),
           ],
         ),
