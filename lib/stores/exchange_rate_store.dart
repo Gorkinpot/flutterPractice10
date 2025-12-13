@@ -29,7 +29,6 @@ abstract class _ExchangeRateStore with Store {
   @action
   void _updateRates() {
     rates.forEach((key, value) {
-      // меняем курс на ±0.5%
       final change = (1 + (_random.nextDouble() - 0.5) / 100);
       rates[key] = double.parse((value * change).toStringAsFixed(4));
     });

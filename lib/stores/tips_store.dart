@@ -1,5 +1,5 @@
 import 'package:mobx/mobx.dart';
-import '../models/tip.dart';
+import 'package:project/models/tip.dart';
 
 part 'tips_store.g.dart';
 

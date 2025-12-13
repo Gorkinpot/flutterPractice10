@@ -28,8 +28,8 @@ class CurrencyConverterApp extends StatelessWidget {
     return MaterialApp(
       title: 'Конвертер валют',
       theme: ThemeData(
-        primaryColor: const Color(0xFF8EC5FC), // мягкий голубой
-        scaffoldBackgroundColor: const Color(0xFFF0F4F8), // светло-серый фон
+        primaryColor: const Color(0xFF8EC5FC),
+        scaffoldBackgroundColor: const Color(0xFFF0F4F8),
         appBarTheme: const AppBarTheme(
           backgroundColor: Color(0xFF8EC5FC),
           foregroundColor: Colors.black,
@@ -37,7 +37,7 @@ class CurrencyConverterApp extends StatelessWidget {
         ),
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
-            backgroundColor: const Color(0xFF6CA0DC), // мягкий синий
+            backgroundColor: const Color(0xFF6CA0DC),
             foregroundColor: Colors.white,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(12),

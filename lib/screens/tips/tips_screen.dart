@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import '../../stores/tips_store.dart';
+import 'package:project/stores/tips_store.dart';
 
 class TipsScreen extends StatefulWidget {
   const TipsScreen({super.key});

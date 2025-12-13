@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import '../../stores/conversion_store.dart';
+import 'package:project/stores/conversion_store.dart';
 
 class ConversionHistoryScreen extends StatelessWidget {
   const ConversionHistoryScreen({super.key});

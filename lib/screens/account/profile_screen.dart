@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import '../../stores/account_store.dart';
+import 'package:project/stores/account_store.dart';
 import 'edit_profile_screen.dart';
 
 class ProfileScreen extends StatelessWidget {

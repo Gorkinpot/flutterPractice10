@@ -1,10 +1,9 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:flutter_mobx/flutter_mobx.dart';
-import '../../stores/conversion_store.dart';
-import '../../stores/exchange_rate_store.dart';
-import '../history/conversion_history_screen.dart';
+import 'package:project/stores/conversion_store.dart';
+import 'package:project/stores/exchange_rate_store.dart';
+import 'package:project/screens/history/conversion_history_screen.dart';
 
 class CurrencyConverterScreen extends StatefulWidget {
   const CurrencyConverterScreen({super.key});

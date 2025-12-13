@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart';
-import '../models/rate_alert.dart';
+import 'package:project/models/rate_alert.dart';
 
 class AlertStore extends ChangeNotifier {
   final List<RateAlert> _alerts = [];

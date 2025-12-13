@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import '../../stores/alert_store.dart';
-import '../../models/rate_alert.dart';
+import 'package:project/stores/alert_store.dart';
+import 'package:project/models/rate_alert.dart';
 
 class RateAlertsScreen extends StatefulWidget {
   const RateAlertsScreen({super.key});

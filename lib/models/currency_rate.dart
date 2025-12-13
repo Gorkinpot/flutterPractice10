@@ -1,6 +1,6 @@
 class CurrencyRate {
   String currencyCode;
-  double rate; // relative to base (e.g., base = "USD")
+  double rate;
   DateTime lastUpdated;
 
   CurrencyRate({

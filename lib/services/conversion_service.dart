@@ -1,4 +1,4 @@
-import '../models/conversion.dart';
+import 'package:project/models/conversion.dart';
 
 class ConversionService {
   final List<Conversion> _history = [];
